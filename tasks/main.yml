@@ -1,11 +1,17 @@
 ---
-- name: Ensure git is installed (Debian).
-  apt:
-    name: "{{ item }}"
-    state: installed
-  with_items: git_packages
-  when: (git_install_from_source == false) and (ansible_os_family == 'Debian')
+- include: tasks/oah-install.yml
+  when: oah_command == "install"
 
-# Install git from source when git_install_from_source is true.
-- include: install-from-source.yml
-  when: git_install_from_source == true
+- include: tasks/oah-update.yml
+  when: oah_command == "update"
+
+- include: tasks/oah-remove.yml
+  when: oah_command == "remove"
+
+- include: tasks/oah-reset.yml
+  when: oah_command == "reset"
+
+- include: tasks/oah-validate.yml
+  when: oah_command == "validate"
+
+#- include: tasks/oah-{{ oah_command }}.yml
